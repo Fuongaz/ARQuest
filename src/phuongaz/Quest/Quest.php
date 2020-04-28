@@ -59,10 +59,10 @@ Class Quest extends PluginBase {
 			if($data == 1) $quest->Completed($player);
 			if($data == 2) $quest->showQuest($player);
 		});
-		$form->setTitle("§l§6Nhiệm Vụ");
-		$form->addButton("§l§f•§0 Nhận nhiệm vụ §f•");
-		$form->addButton("§l§f•§0 Báo cáo nhiệm vụ §f•");
-		$form->addButton("§l§f•§0 Nhiệm vụ của bạn §f•");
+		$form->setTitle("§l§6ARQUEST");
+		$form->addButton("§l§cQuest");
+		$form->addButton("§l§cComplete Quest");
+		$form->addButton("§l§cYour Quest");
 		$form->sendToPlayer($sender);
 	}
 }
