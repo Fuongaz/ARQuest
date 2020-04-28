@@ -46,14 +46,9 @@ class Quests
 		{
 			if($this->questExist($quest))
 			{
-					if($this->getPlugin()->hasSpace($player))
-					{
-						$this->givePlayerQuest($player, $quest);
-						$player->sendMessage("§l§f•§a Bạn vừa nhận nhiệm vụ: §e". $this->getQuestTitle($quest));
-						return true;
-					}
-					$player->sendMessage("§l§7Failed to insert Quest Book.");
-					return false;
+				$this->givePlayerQuest($player, $quest);
+				$player->sendMessage("§l§f•§a Bạn vừa nhận nhiệm vụ: §e". $this->getQuestTitle($quest));
+				return true;
 				
 			}
 			$player->sendMessage("§7§lAn error has occured, the quest may have been deleted on the process.");
