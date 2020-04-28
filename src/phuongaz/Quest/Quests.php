@@ -47,14 +47,14 @@ class Quests
 			if($this->questExist($quest))
 			{
 				$this->givePlayerQuest($player, $quest);
-				$player->sendMessage("§l§f•§a Bạn vừa nhận nhiệm vụ: §e". $this->getQuestTitle($quest));
+				$player->sendMessage("§l§aTake quest: §e". $this->getQuestTitle($quest));
 				return true;
 				
 			}
 			$player->sendMessage("§7§lAn error has occured, the quest may have been deleted on the process.");
 			return false;
 		}
-		$player->sendMessage("§l§cBạn đang nhận 1 nhiệm vụ");
+		$player->sendMessage("§l§cYou have 1 quest");
 		return false;
 	}
 
@@ -118,10 +118,10 @@ class Quests
 						$this->removePlayerQuest($player);
 						return true;
 					}
-					$player->sendMessage("§l• §aĐúng vật phẩm nhiệm vụ rồi, nhưng chưa đủ số lượng tìm thêm nhé :3.");
+					$player->sendMessage("§l§cThe quantity is not enough.");
 					return false;
 				}
-				$player->sendMessage("§l§l• §cBạn cần cầm vật phẩm nhiệm vụ.");
+				$player->sendMessage("§l§cNeed to have quest item  in hand.");
 				return false;
 			}
 			$player->sendMessage("§l• §eBạn hiện chưa nhận nhiệm vụ nào.");
@@ -139,7 +139,7 @@ class Quests
 				$dataq = $this->getPlugin()->questData->get($quest);
 				if($data == 1){
 					$this->removePlayerQuest($player);
-					$player->sendMessage("§l§f•§c Đã hủy thành công nhiệm vụ đang làm");
+					$player->sendMessage("§l§cSuccessfully canceled the quest");
 					return;
 				}
 				$this->showInfo($player, $quest);
@@ -163,7 +163,7 @@ class Quests
 		});
 		$title = $this->getQuestTitle($quest);
 		$info = $this->getQuestInfo($quest);
-		$form->setTitle("§l§6Nhiệm Vụ");
+		$form->setTitle("§l§6ARQUest");
 		$form->addLabel("§l".$info);
 		$form->sendToPlayer($player);
 	}
@@ -180,10 +180,10 @@ class Quests
 		});
         $form->setTitle("§l§6Nhiệm Vụ");
 		if($this->hasQuest($player)){
-			$form->setContent("§l§f•§e Bạn đang nhận nhiệm vụ hãy hoàn thành nó");
+			$form->setContent("§l§eYou have 1 quest");
 		}
 		foreach( array_keys($this->getPlugin()->questData->getAll()) as $questid){
-			$form->addButton("§l§f•§0 ".$this->getPlugin()->questData->getNested($questid.".title") ." §f•");
+			$form->addButton($this->getPlugin()->questData->getNested($questid.".title"));
 		}
         	$form->sendToPlayer($player);
     }
@@ -199,9 +199,9 @@ class Quests
 			}
 		});
         $form->setTitle($this->getQuestTitle($quest));
-		$form->setContent("§fNhiệm vụ:§a ". $this->getQuestTitle($quest). "\n§f-§6 ". $this->getQuestInfo($quest));
-		$form->setButton1("§l§f•§0 Nhận§f •");
-		$form->setButton2("§l§f•§0 Hủy§f •");
+		$form->setContent("§fQuest-name:§a ". $this->getQuestTitle($quest). "\n§f-§6 ". $this->getQuestInfo($quest));
+		$form->setButton1("§l§aTake");
+		$form->setButton2("§l§cCancel");
         $form->sendToPlayer($player);
 	}
 }
