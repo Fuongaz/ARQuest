@@ -1,0 +1,10 @@
+name: ARQuest
+main: phuongaz\Quest\Quest
+version: 1.0
+author: phuongaz
+api: 3.0.0
+load: POSTWORLD
+depend: FormAPI
+commands:
+  arquest:
+    description: Quest

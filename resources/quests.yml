@@ -1,0 +1,14 @@
+collectLogs2:
+  title: "Tiều phu"
+  desc: "§l§aThu hoạch §e64§a gỗ xoài §0Phần thưởng:§e 900§a VND"
+  item: "17:0:64"
+  cmd:
+    - givemoney "{player}" 900
+
+diamond:
+  title: "Thợ mỏ"
+  desc: "§l§aĐào §e50§a Khối kim cương§0+ Phần thưởng: §e 3000 §DVND,§e Cơ hội nhận được §61§e ngọc khảm"
+  item: "57:0:50"
+  cmd:
+    - givemoney "{player}" 3000
+    - gems rand 5 "{player}"
