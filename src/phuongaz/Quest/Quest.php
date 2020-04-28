@@ -28,7 +28,7 @@ use jojoe77777\FormAPI\SimpleForm;
 Class Quest extends PluginBase {
 
 	public $db;
-	
+
 	public function onEnable():void {
 		$this->saveResource('quests.yml');
 		$this->questData = new Config($this->getDataFolder() . "quests.yml", CONFIG::YAML);
@@ -39,7 +39,7 @@ Class Quest extends PluginBase {
 	}
 
 	public function onCommand(CommandSender $sender, Command $command, $label, array $args) : bool {
-		if(strtolower($cmd->getName()) == "arquest"){
+		if(strtolower($command->getName()) == "arquest"){
 			if($sender instanceof Player){
 				$this->sendForm($sender);
 			}else $sender->sendMessage("Use command in game!");
