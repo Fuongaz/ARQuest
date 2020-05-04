@@ -26,9 +26,11 @@ use pocketmine\inventory\Inventory;
 use jojoe77777\FormAPI\SimpleForm;
 
 Class Quest extends PluginBase {
-
+	
+	private $quests;
+	private $questData;
 	public $db;
-
+	
 	public function onEnable():void {
 		$this->saveResource('quests.yml');
 		$this->questData = new Config($this->getDataFolder() . "quests.yml", CONFIG::YAML);
