@@ -227,7 +227,6 @@ class Quests
 
 	/**
 	* @param Player $player
-	* @param string $quest
 	*/
 	public function sendQuestApplyForm(Player $player){
 		$form = new SimpleForm(function(Player $player, ?int $data){
