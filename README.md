@@ -10,9 +10,8 @@
 # Usage
  + `/arquest` To open form
 # Features:
-[+] Config support 
-[+] Form support
-[ ] Quests by day
+- Config support 
+- Form support
 
 # Images
 ![2020-05-05_1.png](https://i0.wp.com/s1.uphinh.org/2020/05/05/2020-05-05_1.png)
