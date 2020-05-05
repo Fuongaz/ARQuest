@@ -4,6 +4,7 @@ branches:
 - master
 projects:
   ARQuest:
+    icon: icon.png
     path: ""
     libs:
       - src: jojoe77777/FormAPI/libFormAPI
