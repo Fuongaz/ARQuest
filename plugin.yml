@@ -1,8 +1,8 @@
 name: ARQuest
 main: phuongaz\Quest\Quest
-version: 1.0
+version: 0.2
 author: phuongaz
-api: 3.0.0
+api: 3.9.0
 load: POSTWORLD
 depend: FormAPI
 commands:

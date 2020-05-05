@@ -1,0 +1,20 @@
+#Form
+Title-form: "ARQuest"
+
+Button1: "Take"
+Button2: "Cancel"
+
+Quests-button: "Quests"
+Complete-button: "Complete"
+Player-quests-button: "Your Quests"
+
+Cancel-quest-button: "Cancel quest"
+No-quest-button: "You don't have any quest"
+#Message
+Succes-cancel-quest: "§l§cSuccessfully canceled the quest"
+No-quest: "You don't have any quest"
+Have-quest: "You have 1 quest"
+Need-item: "Need to have quest item in hand"
+Quantity-item: "§l§cThe quantity is not enough."
+Take-quest: "Take quest:"
+

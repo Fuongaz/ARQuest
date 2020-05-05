@@ -12,18 +12,26 @@ use pocketmine\item\Item;
 use jojoe77777\FormAPI\{SimpleForm, CustomForm, ModalForm};
 class Quests
 {
+	/** @var Quest */
   	private $plugin;
-
+  	/** @var array[] */
 	private $questCache = [];
 	
 	public function __construct(Quest $plugin){
         	$this->plugin = $plugin;
 	}
 
+	/**
+	* @return Quest
+	*/
 	public function getPlugin() :Quest {
 		return $this->plugin;
 	}
 	
+	/**
+	* @param Player $player
+	* @return boolen
+	*/
 	public function hasQuest(Player $player) : bool
 	{
 		$name = $player->getName();
@@ -32,6 +40,10 @@ class Quests
 		return empty($array) == false;
 	}
 
+	/**
+	* @param Player $player
+	* @return string[]|null
+	*/
 	public function getPlayerQuest(Player $player) : ?string
 	{
 		$name = $player->getName();
@@ -40,24 +52,33 @@ class Quests
 		return $resultArr["quest"];
 	}
 	
-	public function validatePlayerQuest(Player $player, $quest) : bool
+	/**
+	* @param Player @player
+	* @param string[]|null $quest
+	*/
+	public function validatePlayerQuest(Player $player,?string $quest) : bool
 	{
 		if($this->hasQuest($player) == false)
 		{
 			if($this->questExist($quest))
 			{
 				$this->givePlayerQuest($player, $quest);
-				$player->sendMessage("§l§aTake quest: §e". $this->getQuestTitle($quest));
+				$player->sendMessage($this->getPlugin()->getConfig()->get('Take-quest'). $this->getQuestTitle($quest));
 				return true;
 				
 			}
 			$player->sendMessage("§7§lAn error has occured, the quest may have been deleted on the process.");
 			return false;
 		}
-		$player->sendMessage("§l§cYou have 1 quest");
+		$player->sendMessage($this->getPlugin()->getConfig()->get('Have-quest'));
 		return false;
 	}
 
+	/**
+	* @param Player $player
+	* @param string $quest
+	* @return void
+	*/
  	public function givePlayerQuest(Player $player, string $quest) : void
 	{
 		$stmt = $this->getPlugin()->db->prepare("INSERT OR REPLACE INTO pquests (name, quest) VALUES (:name, :quest);");
@@ -65,41 +86,72 @@ class Quests
 		$stmt->bindValue(":quest", $quest);
 		$result = $stmt->execute();
     }
-	
+
+	/**
+	* @param Player $player
+	* @return void
+	*/	
 	public function removePlayerQuest(Player $player) : void
 	{
 		$name = $player->getName();
 		$this->getPlugin()->db->query("DELETE FROM pquests WHERE name = '$name';");
 	}
 
+	/**
+	* @param string $quest
+	* @return boolen
+	*/
 	public function questExist(string $quest): bool
 	{
 		return (array_key_exists($quest, $this->getPlugin()->questData->getAll() )) ? true : false;
 	}
 
+	/**
+	* @param string $quest
+	* @return string[] Title quest
+	*/
 	public function getQuestTitle(string $quest) : string
 	{
 		return $this->getPlugin()->questData->get($quest)['title'];
 	}
 
-	
+	/**
+	* @param string $quest
+	* @return string[] description quest
+	*/
 	public function getQuestInfo(string $quest) : string
 	{
 		return $this->getPlugin()->questData->get($quest)['desc'];
 	}
 
+
+
+	/**
+	* @param string[] $quest
+	* @return Item
+	*/
 	public function getQuestItem(string $quest) : Item
 	{
 		$item = (string) $this->getPlugin()->questData->get($quest)['item'];
 		$i = explode(":", $item);
-		return Item::get($i[0], $i[1], $i[2]);
+		return Item::get((int)$i[0], (int)$i[1], (int)$i[2]);
 	}
 
+
+
+	/**
+	* @param string[] $quest
+	* @return array[] Commands
+	*/
 	public function getQuestCmds(string $quest) : array
 	{
 		return $this->getPlugin()->questData->get($quest)['cmd'];
 	}
-	
+
+	/**
+	* @param Player $player
+	* @return boolen
+	*/	
 	public function Completed(Player $player) : bool
 	{
 		if($player->getGamemode() <> 1){
@@ -118,19 +170,23 @@ class Quests
 						$this->removePlayerQuest($player);
 						return true;
 					}
-					$player->sendMessage("§l§cThe quantity is not enough.");
+					$player->sendMessage($this->getPlugin()->getConfig()->get('Quantity-item'));
 					return false;
 				}
-				$player->sendMessage("§l§cNeed to have quest item  in hand.");
+				$player->sendMessage($this->getPlugin()->getConfig()->get('Need-item'));
 				return false;
 			}
-			$player->sendMessage("§l• §eBạn hiện chưa nhận nhiệm vụ nào.");
+			$player->sendMessage($this->getPlugin()->getConfig()->get('No-quest'));
 			return false;
 		}
 		$player->sendMessage("§l§7Creative mode is not allowed.");
 		return false;
 	}
-	
+
+	/**
+	* @param Player $player
+	* @return mixed
+	*/
 	public function showQuest(Player $player) {
 		$quest = $this->getPlayerQuest($player);
 		$form = new SimpleForm(function(Player $player, $data) use ($quest){
@@ -139,7 +195,7 @@ class Quests
 				$dataq = $this->getPlugin()->questData->get($quest);
 				if($data == 1){
 					$this->removePlayerQuest($player);
-					$player->sendMessage("§l§cSuccessfully canceled the quest");
+					$player->sendMessage($this->getPlugin()->getConfig()->get('Succes-cancel-quest'));
 					return;
 				}
 				$this->showInfo($player, $quest);
@@ -147,48 +203,62 @@ class Quests
 				$this->sendQuestApplyForm($player);
 			}
 		});
-		$form->setTitle("§l§6Nhiệm Vụ");
+		$form->setTitle($this->getPlugin()->getConfig()->get('Title-form'));
 		if($this->hasQuest($player)){
-			$form->addButton("§l§f•§0 ".$this->getQuestTitle($quest). " §f•");
-			$form->addButton("§l§f•§0 Hủy nhiệm vụ đang làm §f•");
+			$form->addButton($this->getQuestTitle($quest));
+			$form->addButton($this->getPlugin()->getConfig()->get('Cancel-quest-button'));
 		}else{
-			$form->addButton("§l§f•§c Bạn chưa nhận nhiệm vụ nào §f•");
+			$form->addButton($this->getPlugin()->getConfig()->get('No-quest-button'));
 		}
 		$form->sendToPlayer($player);
 	}
 
+	/**
+	* @param Player $player
+	* @param string[] $quest
+	* @return mixed
+	*/
 	public function showInfo(Player $player,string $quest){
 		$form = new CustomForm(function(Player $player, ?array $data){
 			if(is_null($data)) $this->getPlugin()->sendForm($player);
 		});
 		$title = $this->getQuestTitle($quest);
 		$info = $this->getQuestInfo($quest);
-		$form->setTitle("§l§6ARQUest");
+		$form->setTitle($this->getPlugin()->getConfig()->get('Title-form'));
 		$form->addLabel("§l".$info);
 		$form->sendToPlayer($player);
 	}
 
-	
-	public function sendQuestApplyForm(Player $player):void{
+	/**
+	* @param Player $player
+	* @param string[] $quest
+	* @return mixed
+	*/
+	public function sendQuestApplyForm(Player $player){
 		$form = new SimpleForm(function(Player $player, ?int $data){
 			if(is_null($data)) return;
-				$button = $data;
-				$list = array_keys( $this->getPlugin()->questData->getAll() );
-				$quest = $list[ $button ];
-				$this->questCache[ $player->getName() ] = $quest;
-				$this->sendQuestInfo($player, $quest);
+			$button = $data;
+			$list = array_keys( $this->getPlugin()->questData->getAll() );
+			$quest = $list[ $button ];
+			$this->questCache[ $player->getName() ] = $quest;
+			$this->sendQuestInfo($player, $quest);
 		});
-        $form->setTitle("§l§6Nhiệm Vụ");
+		$form->setTitle($this->getPlugin()->getConfig()->get('Title-form'));
 		if($this->hasQuest($player)){
-			$form->setContent("§l§eYou have 1 quest");
+			$form->setContent($this->getPlugin()->getConfig()->get('Have-quest'));
 		}
 		foreach( array_keys($this->getPlugin()->questData->getAll()) as $questid){
 			$form->addButton($this->getPlugin()->questData->getNested($questid.".title"));
 		}
-        	$form->sendToPlayer($player);
+        $form->sendToPlayer($player);
     }
 	
-	public function sendQuestInfo(Player $player, string $quest) :void{
+	/**
+	* @param Player $player
+	* @param string[] $quest
+	* @return mixed
+	*/
+	public function sendQuestInfo(Player $player, string $quest){
 		$form = new ModalForm(function (Player $player,  $data){
 			if(is_null($data)) $this->sendQuestApplyForm($player);
 			if($data){
@@ -200,8 +270,8 @@ class Quests
 		});
         $form->setTitle($this->getQuestTitle($quest));
 		$form->setContent("§fQuest-name:§a ". $this->getQuestTitle($quest). "\n§f-§6 ". $this->getQuestInfo($quest));
-		$form->setButton1("§l§aTake");
-		$form->setButton2("§l§cCancel");
+		$form->setButton1($this->getPlugin()->getConfig()->get('Button1'));
+		$form->setButton2($this->getPlugin()->getConfig()->get('Button2'));
         $form->sendToPlayer($player);
 	}
 }
