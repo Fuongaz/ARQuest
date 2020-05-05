@@ -46,10 +46,6 @@ Class Quest extends PluginBase {
 	}
 
 
-	/**
-	* @param Player $player
-	* @param string $string
-	*/
 	public function rca(Player $player, string $string){
 		$command = str_replace("{player}", $player->getName(), $string);
 		Server::getInstance()->dispatchCommand(new ConsoleCommandSender(), $command);
