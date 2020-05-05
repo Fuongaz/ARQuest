@@ -18,15 +18,12 @@ Class Quest extends PluginBase {
 	public $quests;
 	/** @var Config*/
 	public $questData;
-	/* @var Database*/
+	/* @var \Sqlite3*/
 	public $db;
 	/**@var Config*/
 	private $config;
 
-	/**
-	* @return void
-	*/
-	public function onEnable():void{
+	public function onEnable(){
 		$this->saveDefaultConfig();
 		$this->saveResource("quests.yml");
 		$this->saveResource("config.yml");
@@ -39,13 +36,6 @@ Class Quest extends PluginBase {
 	}
 
 
-	/**
-	* @param CommandSender $sender
-	* @param Command $command
-	* @param string[] $label
-	* @param array[] $args
-	* @return boolen
-	*/
 	public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool {
 		if(strtolower($command->getName()) == "arquest"){
 			if($sender instanceof Player){
@@ -58,18 +48,16 @@ Class Quest extends PluginBase {
 
 	/**
 	* @param Player $player
-	* @param string[] $string Command
-	* @return void
+	* @param string $string
 	*/
-	public function rca(Player $player, string $string) : void{
+	public function rca(Player $player, string $string){
 		$command = str_replace("{player}", $player->getName(), $string);
 		Server::getInstance()->dispatchCommand(new ConsoleCommandSender(), $command);
 	}
 	/**
 	* @param Player $player
-	* @return void
 	*/
-	public function sendForm(Player $player) :void {
+	public function sendForm(Player $player){
 		$quest = new Quests($this);
 		$form = new SimpleForm(function(Player $player, ?int $data) use ($quest){
 			if($data == 0) $quest->sendQuestApplyForm($player);
@@ -82,13 +70,5 @@ Class Quest extends PluginBase {
 		$form->addButton($this->getConfig()->get("Player-quests-button"));
 		$form->sendToPlayer($player);
 	}
-
-	/**
-	* @return Config
-	*/
-/*	public function getConfig() : Config{
-		var_dump($this->config->getAll());
-		return $this->config;
-	}*/
 }
 		
