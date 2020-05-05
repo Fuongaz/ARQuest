@@ -6,7 +6,7 @@
 | [![View Count](http://hits.dwyl.io/ZzKino/ARQuest.svg)](http://hits.dwyl.io/ZzKino/ARQuest.svg) |
 
 # Install
-You must use the pre-compiled phar from [Poggit-CI]https://poggit.pmmp.io/ci/ZzKino/ARQuest/~)
+You must use the pre-compiled phar from [Poggit-CI](https://poggit.pmmp.io/ci/ZzKino/ARQuest/~)
 
 # Usage
  + `/arquest` To open form
