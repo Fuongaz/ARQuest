@@ -30,7 +30,7 @@ class Quests
 	
 	/**
 	* @param Player $player
-	* @return boolen
+	* @return bool
 	*/
 	public function hasQuest(Player $player) : bool
 	{
@@ -42,7 +42,7 @@ class Quests
 
 	/**
 	* @param Player $player
-	* @return string[]|null
+	* @return string|null
 	*/
 	public function getPlayerQuest(Player $player) : ?string
 	{
@@ -53,8 +53,8 @@ class Quests
 	}
 	
 	/**
-	* @param Player @player
-	* @param string[]|null $quest
+	* @param Player $player
+	* @param string|null $quest
 	*/
 	public function validatePlayerQuest(Player $player,?string $quest) : bool
 	{
@@ -77,21 +77,19 @@ class Quests
 	/**
 	* @param Player $player
 	* @param string $quest
-	* @return void
 	*/
- 	public function givePlayerQuest(Player $player, string $quest) : void
+ 	public function givePlayerQuest(Player $player, string $quest)
 	{
 		$stmt = $this->getPlugin()->db->prepare("INSERT OR REPLACE INTO pquests (name, quest) VALUES (:name, :quest);");
 		$stmt->bindValue(":name", $player->getName());
 		$stmt->bindValue(":quest", $quest);
 		$result = $stmt->execute();
-    }
+    	}
 
 	/**
 	* @param Player $player
-	* @return void
 	*/	
-	public function removePlayerQuest(Player $player) : void
+	public function removePlayerQuest(Player $player)
 	{
 		$name = $player->getName();
 		$this->getPlugin()->db->query("DELETE FROM pquests WHERE name = '$name';");
@@ -99,7 +97,7 @@ class Quests
 
 	/**
 	* @param string $quest
-	* @return boolen
+	* @return bool
 	*/
 	public function questExist(string $quest): bool
 	{
@@ -108,7 +106,7 @@ class Quests
 
 	/**
 	* @param string $quest
-	* @return string[] Title quest
+	* @return string
 	*/
 	public function getQuestTitle(string $quest) : string
 	{
@@ -117,7 +115,7 @@ class Quests
 
 	/**
 	* @param string $quest
-	* @return string[] description quest
+	* @return string
 	*/
 	public function getQuestInfo(string $quest) : string
 	{
@@ -127,7 +125,7 @@ class Quests
 
 
 	/**
-	* @param string[] $quest
+	* @param string $quest
 	* @return Item
 	*/
 	public function getQuestItem(string $quest) : Item
@@ -140,7 +138,7 @@ class Quests
 
 
 	/**
-	* @param string[] $quest
+	* @param string $quest
 	* @return array[] Commands
 	*/
 	public function getQuestCmds(string $quest) : array
@@ -150,7 +148,7 @@ class Quests
 
 	/**
 	* @param Player $player
-	* @return boolen
+	* @return bool
 	*/	
 	public function Completed(Player $player) : bool
 	{
@@ -185,7 +183,6 @@ class Quests
 
 	/**
 	* @param Player $player
-	* @return mixed
 	*/
 	public function showQuest(Player $player) {
 		$quest = $this->getPlayerQuest($player);
@@ -215,8 +212,7 @@ class Quests
 
 	/**
 	* @param Player $player
-	* @param string[] $quest
-	* @return mixed
+	* @param string $quest
 	*/
 	public function showInfo(Player $player,string $quest){
 		$form = new CustomForm(function(Player $player, ?array $data){
@@ -231,8 +227,7 @@ class Quests
 
 	/**
 	* @param Player $player
-	* @param string[] $quest
-	* @return mixed
+	* @param string $quest
 	*/
 	public function sendQuestApplyForm(Player $player){
 		$form = new SimpleForm(function(Player $player, ?int $data){
@@ -255,8 +250,7 @@ class Quests
 	
 	/**
 	* @param Player $player
-	* @param string[] $quest
-	* @return mixed
+	* @param string $quest
 	*/
 	public function sendQuestInfo(Player $player, string $quest){
 		$form = new ModalForm(function (Player $player,  $data){
@@ -268,10 +262,10 @@ class Quests
 				unset($this->questCache[$player->getName()]);
 			}
 		});
-        $form->setTitle($this->getQuestTitle($quest));
+        	$form->setTitle($this->getQuestTitle($quest));
 		$form->setContent("§fQuest-name:§a ". $this->getQuestTitle($quest). "\n§f-§6 ". $this->getQuestInfo($quest));
 		$form->setButton1($this->getPlugin()->getConfig()->get('Button1'));
 		$form->setButton2($this->getPlugin()->getConfig()->get('Button2'));
-        $form->sendToPlayer($player);
+        	$form->sendToPlayer($player);
 	}
 }
