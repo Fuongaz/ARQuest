@@ -14,7 +14,7 @@ class Quests
 {
 	/** @var Quest */
   	private $plugin;
-  	/** @var array[] */
+	
 	private $questCache = [];
 	
 	public function __construct(Quest $plugin){
@@ -54,9 +54,9 @@ class Quests
 	
 	/**
 	* @param Player $player
-	* @param string|null $quest
+	* @param string|array|null $quest
 	*/
-	public function validatePlayerQuest(Player $player,?string $quest) : bool
+	public function validatePlayerQuest(Player $player, $quest) : bool
 	{
 		if($this->hasQuest($player) == false)
 		{
