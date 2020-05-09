@@ -4,7 +4,6 @@ version: 0.2
 author: phuongaz
 api: 3.9.0
 load: POSTWORLD
-depend: FormAPI
 commands:
   arquest:
     description: Quest
