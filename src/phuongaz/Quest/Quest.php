@@ -31,7 +31,6 @@ Class Quest extends PluginBase {
 		$this->questData = new Config($this->getDataFolder() . "quests.yml", CONFIG::YAML);
 		$this->db = new \SQLite3($this->getDataFolder() . "quest.db"); 
 		$this->db->exec("CREATE TABLE IF NOT EXISTS pquests (name TEXT PRIMARY KEY COLLATE NOCASE, quest TEXT);");
-		$this->db->exec("CREATE TABLE IF NOT EXISTS pcompleted (name TEXT PRIMARY KEY COLLATE NOCASE, quests TEXT);");
 		$this->quests = new Quests($this); 
 	}
 
